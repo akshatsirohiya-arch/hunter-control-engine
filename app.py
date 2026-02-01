@@ -18,10 +18,11 @@ breadth_percent = get_breadth_percent()
 vix_change_pct = get_vix_change_pct()
 
 # Compute score
-damage_score = compute_damage_score(
+damage_score, metric_breakdown = compute_damage_score(
     breadth_percent=breadth_percent,
     vix_change_pct=vix_change_pct
 )
+
 
 regime = get_regime(damage_score)
 permissions = get_permissions(damage_score)
@@ -70,6 +71,13 @@ else:
 st.subheader("Market Status")
 st.metric("Damage Score", f"{damage_score} / 6")
 st.metric("Market Regime", regime)
+
+st.subheader("📊 Why this score?")
+
+for metric, value in metric_breakdown.items():
+    icon = "✅" if value == 1 else "❌"
+    st.write(f"{icon} {metric}")
+
 
 st.subheader("Allowed Actions")
 for k, v in permissions.items():
