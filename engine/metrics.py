@@ -6,13 +6,17 @@ def index_trend_damage(index_df):
     Returns 1 if index is below 50-DMA and fails to reclaim.
     """
     recent = index_df.tail(15)
-    below_50 = recent["Close"] < recent["DMA_50"]
+
+    close_vals = recent["Close"].astype(float).values
+    dma_vals = recent["DMA_50"].astype(float).values
+
+    below_50 = close_vals < dma_vals
 
     if below_50.any():
-        reclaimed = recent["Close"].iloc[-1] > recent["DMA_50"].iloc[-1]
-        if not reclaimed:
+        if close_vals[-1] <= dma_vals[-1]:
             return 1
     return 0
+
 
 
 def major_trend_failure(index_df):
