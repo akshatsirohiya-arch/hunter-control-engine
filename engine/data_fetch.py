@@ -60,7 +60,10 @@ def get_breadth_percent():
         df = fetch_price_data(ticker)
         df = add_moving_averages(df)
 
-        if df["Close"].iloc[-1] > df["DMA_50"].iloc[-1]:
+        close_price = float(df["Close"].iloc[-1])
+        dma_50 = float(df["DMA_50"].iloc[-1])
+
+        if close_price > dma_50:
             above += 1
 
     return (above / len(tickers)) * 100
