@@ -30,4 +30,6 @@ def breadth_collapse(breadth_percent):
 
 
 def volatility_instability(vix_change_pct):
-    return 1 if vix_change_pct >= 0.30 else 0
+    vix_val = float(vix_change_pct)
+    return 1 if vix_val >= 0.30 else 0
+
