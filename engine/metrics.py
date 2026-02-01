@@ -24,7 +24,11 @@ def major_trend_failure(index_df):
     Returns 1 if index stays below 200-DMA for 5 consecutive days.
     """
     recent = index_df.tail(5)
-    if (recent["Close"] < recent["DMA_200"]).all():
+
+    close_vals = recent["Close"].astype(float).values
+    dma_vals = recent["DMA_200"].astype(float).values
+
+    if (close_vals < dma_vals).all():
         return 1
     return 0
 
