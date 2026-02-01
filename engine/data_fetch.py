@@ -47,3 +47,21 @@ def get_vix_change_pct():
 
     return (end - start) / start
 
+
+def get_breadth_percent():
+    """
+    Simple breadth proxy using SPY and QQQ.
+    Returns percentage above 50-DMA.
+    """
+    tickers = ["SPY", "QQQ"]
+    above = 0
+
+    for ticker in tickers:
+        df = fetch_price_data(ticker)
+        df = add_moving_averages(df)
+
+        if df["Close"].iloc[-1] > df["DMA_50"].iloc[-1]:
+            above += 1
+
+    return (above / len(tickers)) * 100
+
