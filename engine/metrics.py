@@ -1,13 +1,7 @@
 # engine/metrics.py
 # Market damage metrics (binary: 0 or 1)
 
-import numpy as np
-
-
-def index_trend_damage(index_df):
-    """
-    Returns 1 if index is below 50-DMA and fails to reclaim.
-    """
+def index_trend_damage_v2(index_df):
     recent = index_df.tail(15)
 
     close_vals = recent["Close"].astype(float).values
@@ -15,16 +9,12 @@ def index_trend_damage(index_df):
 
     below_50 = close_vals < dma_vals
 
-    if below_50.any():
-        if close_vals[-1] <= dma_vals[-1]:
-            return 1
+    if below_50.any() and close_vals[-1] <= dma_vals[-1]:
+        return 1
     return 0
 
 
-def major_trend_failure(index_df):
-    """
-    Returns 1 if index stays below 200-DMA for 5 consecutive days.
-    """
+def major_trend_failure_v2(index_df):
     recent = index_df.tail(5)
 
     close_vals = recent["Close"].astype(float).values
@@ -36,18 +26,8 @@ def major_trend_failure(index_df):
 
 
 def breadth_collapse(breadth_percent):
-    """
-    Returns 1 if breadth is below 40%.
-    """
-    if breadth_percent < 40:
-        return 1
-    return 0
+    return 1 if breadth_percent < 40 else 0
 
 
 def volatility_instability(vix_change_pct):
-    """
-    Returns 1 if VIX expands more than 30% in 5 days.
-    """
-    if vix_change_pct >= 0.30:
-        return 1
-    return 0
+    return 1 if vix_change_pct >= 0.30 else 0
