@@ -1,6 +1,9 @@
 # engine/metrics.py
 # Market damage metrics (binary: 0 or 1)
 
+import numpy as np
+
+
 def index_trend_damage(index_df):
     """
     Returns 1 if index is below 50-DMA and fails to reclaim.
@@ -16,7 +19,6 @@ def index_trend_damage(index_df):
         if close_vals[-1] <= dma_vals[-1]:
             return 1
     return 0
-
 
 
 def major_trend_failure(index_df):
