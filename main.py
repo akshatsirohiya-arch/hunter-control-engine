@@ -8,7 +8,9 @@ from engine.permissions import get_regime, get_permissions
 def run():
     # Temporary manual inputs (will automate later)
     breadth_percent = 45      # placeholder
-    vix_change_pct = 0.10     # placeholder
+    from engine.data_fetch import get_vix_change_pct
+vix_change_pct = get_vix_change_pct()
+
 
     damage_score = compute_damage_score(
         breadth_percent=breadth_percent,
