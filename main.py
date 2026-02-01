@@ -7,7 +7,9 @@ from engine.permissions import get_regime, get_permissions
 
 def run():
     # Temporary manual inputs (will automate later)
-    breadth_percent = 45      # placeholder
+    from engine.data_fetch import get_breadth_percent
+breadth_percent = get_breadth_percent()
+
     from engine.data_fetch import get_vix_change_pct
 vix_change_pct = get_vix_change_pct()
 
