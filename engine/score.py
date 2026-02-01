@@ -3,8 +3,8 @@
 
 from engine.data_fetch import fetch_price_data, add_moving_averages
 from engine.metrics import (
-    index_trend_damage,
-    major_trend_failure,
+    index_trend_damage_v2,
+    major_trend_failure_v2,
     breadth_collapse,
     volatility_instability
 )
@@ -28,14 +28,16 @@ def compute_damage_score(
 
     # Metric 1: Index trend damage
     score += max(
-        index_trend_damage(spx),
-        index_trend_damage(ndx)
+        index_trend_damage_v2(spx),
+index_trend_damage_v2(ndx)
+
     )
 
     # Metric 2: Major trend failure
     score += max(
-        major_trend_failure(spx),
-        major_trend_failure(ndx)
+        major_trend_failure_v2(spx),
+major_trend_failure_v2(ndx)
+
     )
 
     # Metric 3: Breadth collapse
