@@ -16,34 +16,25 @@ def compute_damage_score(
     breadth_percent=50,
     vix_change_pct=0.0
 ):
-    """
-    Returns damage score from 0 to 6.
-    """
-
-    # Fetch index data
     spx = add_moving_averages(fetch_price_data(spx_ticker))
     ndx = add_moving_averages(fetch_price_data(ndx_ticker))
 
-    score = 0
+    metrics = {}
 
-    # Metric 1: Index trend damage
-    score += max(
+    metrics["Index below 50-DMA (reclaim failed)"] = max(
         index_trend_damage_v2(spx),
-index_trend_damage_v2(ndx)
-
+        index_trend_damage_v2(ndx)
     )
 
-    # Metric 2: Major trend failure
-    score += max(
+    metrics["Index below 200-DMA"] = max(
         major_trend_failure_v2(spx),
-major_trend_failure_v2(ndx)
-
+        major_trend_failure_v2(ndx)
     )
 
-    # Metric 3: Breadth collapse
-    score += breadth_collapse(breadth_percent)
+    metrics["Breadth < 40%"] = breadth_collapse(breadth_percent)
 
-    # Metric 4: Volatility instability
-    score += volatility_instability(vix_change_pct)
+    metrics["Volatility expansion (VIX)"] = volatility_instability(vix_change_pct)
 
-    return score
+    damage_score = sum(metrics.values())
+
+    return damage_score, metrics
