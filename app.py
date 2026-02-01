@@ -29,29 +29,39 @@ permissions = get_permissions(damage_score)
 st.divider()
 st.subheader("🎯 Hunter Stocks (Read-Only)")
 
-if damage_score <= 3:
-    # Fetch index data once (for relative comparison)
-    index_df = add_moving_averages(fetch_price_data("^GSPC"))
+st.write(f"Damage Score check: {damage_score}")
 
+if damage_score <= 3:
+    st.write("Hunter system: ENABLED")
+
+    index_df = add_moving_averages(fetch_price_data("^GSPC"))
     eligible_stocks = []
+    checked = 0
+    errors = 0
 
     for ticker in HUNTER_UNIVERSE:
         try:
             stock_df = fetch_price_data(ticker)
+            checked += 1
+
             if len(stock_df) < 120:
                 continue
 
             if is_eligible(stock_df, index_df):
                 eligible_stocks.append(ticker)
 
-        except Exception:
-            continue
+        except Exception as e:
+            errors += 1
+
+    st.write(f"Stocks checked: {checked}")
+    st.write(f"Errors while checking: {errors}")
 
     if eligible_stocks:
+        st.write("Eligible stocks:")
         for ticker in eligible_stocks:
             st.write(f"✅ {ticker}")
     else:
-        st.write("No stocks eligible right now. Cash is a position.")
+        st.write("No stocks eligible right now.")
 
 else:
     st.write("Hunter system disabled due to market damage.")
