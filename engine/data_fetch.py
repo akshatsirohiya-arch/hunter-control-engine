@@ -8,16 +8,21 @@ import pandas as pd
 def fetch_price_data(ticker, lookback_days=300):
     """
     Fetches historical price data for a ticker.
+    Ensures Close is always a Series, not a DataFrame.
     """
     df = yf.download(
         ticker,
         period=f"{lookback_days}d",
         auto_adjust=True,
         progress=False
-    )
+    ).dropna()
 
-    df = df.dropna()
+    # 🔒 Force Close to be a Series (yfinance safety fix)
+    if isinstance(df["Close"], pd.DataFrame):
+        df["Close"] = df["Close"].iloc[:, 0]
+
     return df
+
 
 
 def add_moving_averages(df):
